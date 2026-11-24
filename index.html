@@ -1,12 +1,65 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="BSC 私募合约多签退款工作台"><title>私募退款 · 多签工作台</title><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script></head>
-<body><main>
-<header><div><span class="eyebrow">BSC MAINNET / REFUND</span><h1>私募退款工作台</h1><p>一笔申请，三人确认，管理员执行。</p></div><button id="connect">连接钱包</button></header>
-<div class="notice" id="wallet">未连接钱包 · 可先查看链上状态</div>
-<section class="overview"><div><span class="eyebrow">本次退款金额</span><div class="amount">0.4 <small>BNB</small></div><p>5 份 × 0.1 BNB × 80%</p></div><div class="addresses"><label>指定收款地址</label><a id="recipient" target="_blank" rel="noopener"></a><label>原私募地址</label><a id="investor" target="_blank" rel="noopener"></a></div></section>
-<section class="bar"><div><strong id="stage">正在读取链上状态…</strong><p id="updated">请稍候</p></div><button class="secondary" id="refresh">刷新状态</button></section>
-<section class="steps"><article><span class="step">01 / 申请</span><h2>管理员创建退款申请</h2><p>将固定收款地址和 0.4 BNB 写入合约。创建后会自动找到申请编号。</p><button id="create" disabled>创建 0.4 BNB 申请</button></article><article><span class="step">02 / 确认</span><h2>三位管理员分别确认</h2><p>使用各自钱包，对下方同一个申请编号发送链上确认交易。</p><button id="confirm" disabled>确认此申请</button></article><article><span class="step">03 / 执行</span><h2>管理员执行退款</h2><p>全部确认完成后，由合约所有者执行，将 BNB 转给指定收款地址。</p><button id="execute" disabled>执行 0.4 BNB 退款</button></article></section>
-<section class="panel"><div class="sectionhead"><h2>申请与确认进度</h2><span id="progress" class="pill">尚未加载</span></div><div id="requestInfo">正在查询匹配本次地址和金额的申请。</div><div id="signers"></div><p id="available"></p><div id="result"></div><button id="download" class="secondary" hidden>下载已退款记录（MD）</button></section>
-<section class="panel"><h2>交易记录</h2><p id="activity" role="status" aria-live="polite">尚未发送交易。钱包会在每一步操作前要求你确认。</p></section>
-<footer><p>网络：BSC 主网（56） · <a id="contractLink" target="_blank" rel="noopener">查看退款合约</a></p><p>每次确认均为链上交易，Gas 由操作钱包承担。页面每 20 秒刷新；已执行的匹配申请会锁定操作按钮。</p></footer>
-</main><dialog id="review"><form method="dialog"><span class="eyebrow">请核对本次操作</span><h2 id="reviewTitle"></h2><div id="reviewBody"></div><div class="dialogActions"><button value="cancel" class="secondary">取消</button><button value="send">打开钱包确认</button></div></form></dialog></body></html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="退款联合签名">
+  <title>退款联合签名</title>
+  <link rel="stylesheet" href="style.css?v=2">
+  <script type="module" src="app.js?v=2"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>退款联合签名</h1>
+      <button id="connect">连接钱包</button>
+    </header>
+    <p id="wallet" class="wallet" hidden></p>
+
+    <section class="overview" aria-label="退款信息">
+      <div>
+        <p class="amount-label">退款金额</p>
+        <div class="amount">0.4 <small>BNB</small></div>
+      </div>
+      <dl class="addresses">
+        <div><dt>指定收款地址</dt><dd><a id="recipient" target="_blank" rel="noopener"></a></dd></div>
+        <div><dt>原私募地址</dt><dd><a id="investor" target="_blank" rel="noopener"></a></dd></div>
+      </dl>
+    </section>
+
+    <section class="steps" aria-label="退款操作">
+      <article>
+        <span class="step" aria-hidden="true">01</span>
+        <h2>管理员申请提现</h2>
+        <button id="create" disabled>创建申请</button>
+      </article>
+      <article>
+        <span class="step" aria-hidden="true">02</span>
+        <h2>三位管理员分别确认</h2>
+        <button id="confirm" disabled>确认申请</button>
+      </article>
+      <article>
+        <span class="step" aria-hidden="true">03</span>
+        <button id="execute" disabled>管理员执行退款 · 0.4 BNB</button>
+      </article>
+    </section>
+    <p id="feedback" role="status" aria-live="polite"></p>
+
+    <section class="panel" aria-label="签名人">
+      <div class="panel-actions"><button class="secondary" id="refresh">刷新状态</button></div>
+      <div id="signers"></div>
+    </section>
+  </main>
+
+  <dialog id="review">
+    <form method="dialog">
+      <h2 id="reviewTitle"></h2>
+      <div id="reviewBody"></div>
+      <div class="dialogActions">
+        <button value="cancel" class="secondary" autofocus>取消</button>
+        <button value="send">打开钱包确认</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
