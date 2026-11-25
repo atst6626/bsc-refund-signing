@@ -1,7 +1,58 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>私募退款 · 合伙人确认</title><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script></head><body><main>
-<header><div><span class="eyebrow">BSC / PARTNER APPROVAL</span><h1>合伙人退款确认</h1><p>核对原私募地址和金额，逐笔完成链上确认。</p></div><button id="connect">连接签名钱包</button></header><div class="notice" id="wallet">无需连接即可查看进度。</div>
-<section class="overview"><div><span class="eyebrow">本批原路退款</span><div class="amount">4.08 <small>BNB</small></div><p>32 个原私募地址 · 51 份 · 退还本金 80%</p></div><div class="addresses"><label>退款合约</label><a href="https://bscscan.com/address/0xae8a7e31076f4ccf7373ec043f43d9c307b46434" target="_blank" rel="noopener">0xae8a7e31076f4ccf7373ec043f43d9c307b46434</a><p>管理员在本机创建申请；两位合伙人在这里分别确认。达到3/3后，由管理员本机程序执行。</p></div></section>
-<section class="bar"><div><strong id="stage">正在读取链上状态…</strong><p id="updated"></p></div><button id="refresh" class="secondary">刷新状态</button></section><div id="activity" class="notice" role="status" aria-live="polite">每次只处理一笔申请，需在钱包内再次确认并支付Gas。</div>
-<section class="panel"><div class="sectionhead"><h2>本批退款明细</h2><span class="pill">逐笔确认 · 共32笔</span></div><div class="tableWrap"><table><thead><tr><th>序号</th><th>原地址／收款地址</th><th>份数</th><th>退款 BNB</th><th>申请号</th><th>进度</th><th>操作</th></tr></thead><tbody id="rows"></tbody></table></div></section>
-<footer><p>本页只确认清单中地址、金额完全匹配的本批申请。每30秒更新一次。</p><p>签名由各自的钱包完成；页面不接收私钥。未创建的申请会在管理员创建后自动显示。</p></footer></main>
-<dialog id="review"><form method="dialog"><span class="eyebrow">确认前请核对</span><h2>同意这笔退款申请</h2><div id="reviewBody" style="white-space:pre-line"></div><div class="dialogActions"><button value="cancel" class="secondary">取消</button><button value="send">打开钱包确认</button></div></form></dialog></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>私募退款 · 合伙人确认</title>
+  <link rel="stylesheet" href="style.css?v=partner-compact">
+  <script type="module" src="app.js?v=partner-compact"></script>
+</head>
+<body>
+  <main class="partner-page">
+    <header>
+      <button id="connect" type="button">连接签名钱包</button>
+    </header>
+
+    <section class="panel" aria-labelledby="refund-heading">
+      <div class="sectionhead">
+        <div>
+          <h2 id="refund-heading">本批退款明细</h2>
+          <span class="refund-count">共 32 笔</span>
+        </div>
+        <button id="refresh" class="secondary" type="button">刷新状态</button>
+      </div>
+      <p id="wallet" class="refund-status" hidden></p>
+      <p id="read-status" class="refund-status" role="status" aria-live="polite">正在读取退款明细…</p>
+      <p id="activity" class="refund-status" role="status" aria-live="polite"></p>
+      <div class="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">序号</th>
+              <th scope="col">原地址／收款地址</th>
+              <th scope="col">份数</th>
+              <th scope="col">退款 BNB</th>
+              <th scope="col">申请号</th>
+              <th scope="col">进度</th>
+              <th scope="col">操作</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="review" aria-labelledby="review-heading">
+    <form method="dialog">
+      <span class="eyebrow">确认前请核对</span>
+      <h2 id="review-heading">同意这笔退款申请</h2>
+      <div id="reviewBody"></div>
+      <div class="dialogActions">
+        <button value="cancel" class="secondary">取消</button>
+        <button value="send">打开钱包确认</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
