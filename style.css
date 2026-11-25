@@ -113,3 +113,4 @@ dialog::backdrop { background: #3b2b126b; }
   .steps { grid-template-columns: minmax(0, 1fr); }
   .steps article { padding: 14px; }
 }
+:root{--batch-table:1}.tableWrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px}th{text-align:left;color:#63766b}th,td{padding:16px 10px;border-bottom:1px solid #e3ebe3}td.address{font:12px ui-monospace,monospace}td button{white-space:nowrap;font-size:12px;padding:10px}tr.done{background:#eaf5ee}tr.blocked{background:#fff0db}.localActions{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}input{font:inherit;padding:11px;border:1px solid #cbd8cf;border-radius:8px;width:100%;margin:5px 0}label{font-size:13px;color:#567568}.log{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.8 ui-monospace,monospace}.danger{background:#9b3e35}form label{display:block;margin-top:12px}

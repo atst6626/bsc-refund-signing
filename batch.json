@@ -1,0 +1,431 @@
+{
+  "batchId": "original-80pct-20261125",
+  "chainId": 56,
+  "contract": "0xae8a7e31076f4ccf7373ec043f43d9c307b46434",
+  "round": 8,
+  "baselineRequestCount": 13,
+  "owner": "0x6690022dde943673746f2b08dab95bd574d4f1b9",
+  "operators": [
+    "0x319df5c815d535d6ba74cfc857bbf72ca5fc1f46",
+    "0x2ca6750c466193e12baa6c3400f6f28319248312"
+  ],
+  "totalWei": "4080000000000000000",
+  "rows": [
+    {
+      "index": 1,
+      "originalRow": 2,
+      "address": "0xccec29efa7858e4849b8753644b3852bd736b043",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 2,
+      "originalRow": 4,
+      "address": "0xe69d511cdcf3c32ff6077d0ca9e2de9699b0838f",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 3,
+      "originalRow": 5,
+      "address": "0xa5fb5f43f3f2625310e91ba6812fdf3993a230d5",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 4,
+      "originalRow": 8,
+      "address": "0x00b77d60733ba23ab1eba5ed6494c507087d600a",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 5,
+      "originalRow": 9,
+      "address": "0xc73434ab4cc725289b6b9b6f5441d7cda55b0c9c",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 6,
+      "originalRow": 18,
+      "address": "0x1a60785d424e596c7ebd3c6c0f303fa5db7f24a2",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 7,
+      "originalRow": 19,
+      "address": "0xeaf41587dc64325ec5735849dc3721b04a172d62",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 8,
+      "originalRow": 20,
+      "address": "0xfae2480f49302394dd7628537c1e199eb2b3af42",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 9,
+      "originalRow": 21,
+      "address": "0x843143117821200999d9f950400d3e90f1e09722",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 10,
+      "originalRow": 22,
+      "address": "0x76908dd077c2d21d03cbd21dcd522ec1bf6e7c1a",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 11,
+      "originalRow": 23,
+      "address": "0x39ffa8c5975dc95c28c9369a17c8614613532169",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 12,
+      "originalRow": 24,
+      "address": "0xbce683c1a986e95b2f8a2db4d91ac094b0dd30fd",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 13,
+      "originalRow": 25,
+      "address": "0x887852d45e7f205f232baaed7ab7f6bba1808850",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 14,
+      "originalRow": 26,
+      "address": "0x2cf75f9a8040b5287937127885d5926a6271a0e0",
+      "shares": 1,
+      "paidSharesByType": [
+        1,
+        0,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 15,
+      "originalRow": 27,
+      "address": "0x708bf1bb539cf3f7b9322f49c1f479d080609fe3",
+      "shares": 1,
+      "paidSharesByType": [
+        1,
+        0,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 16,
+      "originalRow": 28,
+      "address": "0x73d9e8a2723b5a06430027afff999390bfa9892a",
+      "shares": 5,
+      "paidSharesByType": [
+        0,
+        5,
+        0
+      ],
+      "principalWei": "500000000000000000",
+      "refundWei": "400000000000000000"
+    },
+    {
+      "index": 17,
+      "originalRow": 29,
+      "address": "0x4845c0cf548681603f3f5a7c53cd2afee0dae7ce",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 18,
+      "originalRow": 30,
+      "address": "0xc217ce508b71544ffd31666efcaf7ea13d65a8b7",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 19,
+      "originalRow": 31,
+      "address": "0xb0d7cc5c5b867480a11f597b5aeee73d71543f90",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 20,
+      "originalRow": 32,
+      "address": "0x318ebbf387c098fcb1ca9a1900d7db0d5733c6fe",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        0,
+        1
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 21,
+      "originalRow": 33,
+      "address": "0xbf753dc161bcbdbb9ff66584287d36f26c1a7052",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 22,
+      "originalRow": 34,
+      "address": "0x26c7c8e95925aa422632c97a5d7a5b2e3f6dab88",
+      "shares": 10,
+      "paidSharesByType": [
+        0,
+        5,
+        5
+      ],
+      "principalWei": "1000000000000000000",
+      "refundWei": "800000000000000000"
+    },
+    {
+      "index": 23,
+      "originalRow": 35,
+      "address": "0xa8ce4ee3eeb87ea8ee33491b0a69cfd4c261ab86",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 24,
+      "originalRow": 36,
+      "address": "0x50af8c2c46390f0c089c0fc418d9adef9fface0c",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 25,
+      "originalRow": 37,
+      "address": "0xe356330ff9fba454bcc1e72a884c80d139e3bdf4",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 26,
+      "originalRow": 38,
+      "address": "0xa1800e08ea06801f7b34ba24fb76c44756d7b372",
+      "shares": 3,
+      "paidSharesByType": [
+        0,
+        3,
+        0
+      ],
+      "principalWei": "300000000000000000",
+      "refundWei": "240000000000000000"
+    },
+    {
+      "index": 27,
+      "originalRow": 40,
+      "address": "0x1b9cfa395e309e6fa0561635066a6e6b816e956b",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 28,
+      "originalRow": 41,
+      "address": "0x7f22d6cb0653391310aa5d5a44cc062d3021ef95",
+      "shares": 2,
+      "paidSharesByType": [
+        0,
+        1,
+        1
+      ],
+      "principalWei": "200000000000000000",
+      "refundWei": "160000000000000000"
+    },
+    {
+      "index": 29,
+      "originalRow": 42,
+      "address": "0x2ec1fa90aab8c762face4312293234da973b5039",
+      "shares": 3,
+      "paidSharesByType": [
+        0,
+        3,
+        0
+      ],
+      "principalWei": "300000000000000000",
+      "refundWei": "240000000000000000"
+    },
+    {
+      "index": 30,
+      "originalRow": 43,
+      "address": "0x0b82fdd2fa78f1284ada7417b46fbae2ba00d9b6",
+      "shares": 2,
+      "paidSharesByType": [
+        0,
+        2,
+        0
+      ],
+      "principalWei": "200000000000000000",
+      "refundWei": "160000000000000000"
+    },
+    {
+      "index": 31,
+      "originalRow": 44,
+      "address": "0x793f2332478a871af82746da5708961cb7602f83",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    },
+    {
+      "index": 32,
+      "originalRow": 45,
+      "address": "0xaa3eeddf7da6ac240d8080de22becfd4e6a62846",
+      "shares": 1,
+      "paidSharesByType": [
+        0,
+        1,
+        0
+      ],
+      "principalWei": "100000000000000000",
+      "refundWei": "80000000000000000"
+    }
+  ]
+}

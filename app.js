@@ -1,75 +1,9 @@
-import {CONTRACT,RECIPIENT,INVESTOR,AMOUNT,RPCS,S,pad,addressWord,words,decodeRequest,matches,actions} from './core.js';
-const $=id=>document.getElementById(id);
-const explorer='https://bscscan.com';
-for (const [id, address] of [['recipient', RECIPIENT], ['investor', INVESTOR]]) {
-  $(id).href = explorer + '/address/' + address;
-  $(id).textContent = address;
-}
-let wallet=null,account='',snapshot=null,busy=false,loading=false;
-let operationFeedback = '';
-let readFailed = false;
-const rpc=async(method,params)=>{let error;for(const url of RPCS){try{const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method,params}),signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error('RPC HTTP '+response.status);const data=await response.json();if(data.error)throw Error(data.error.message);return data.result;}catch(e){error=e;}}throw error;};
-const call=(data,block='latest')=>rpc('eth_call',[{to:CONTRACT,data},block]);
-function renderFeedback() {
-  const chainFeedback = readFailed ? '链上读取失败，请刷新重试。'
-    : snapshot?.duplicate ? '检测到重复申请，请核对后操作。'
-    : snapshot?.request?.executed ? '本次 0.4 BNB 退款已执行。' : '';
-  $('feedback').textContent = [operationFeedback, chainFeedback].filter(Boolean).join(' ');
-}
-function showError(error) {
-  operationFeedback = error.code === 4001 ? '已取消钱包操作。' : (error.message || String(error));
-  renderFeedback();
-}
-async function readState(){const block=await rpc('eth_blockNumber',[]);const [ownerRaw,opsRaw,countRaw,availableRaw]=await Promise.all([S.owner,S.operators,S.count,S.available].map(s=>call(s,block)));const owner='0x'+words(ownerRaw)[0].slice(-40).toLowerCase(),ow=words(opsRaw),operators=ow.slice(2).map(w=>'0x'+w.slice(-40).toLowerCase());const count=Number(BigInt(countRaw));if(!Number.isSafeInteger(count)||count>2000)throw Error('申请数量超出页面读取范围');const requests=[];for(let start=1;start<=count;start+=20){requests.push(...await Promise.all(Array.from({length:Math.min(20,count-start+1)},(_,i)=>call(S.request+pad(start+i),block).then(v=>decodeRequest(v,start+i)))));}const matching=requests.filter(matches);const request=matching.find(r=>r.executed)||matching.at(-1)||null;const admins=[owner,...operators];if(admins.length!==3||new Set(admins).size!==3)throw Error('当前签名人数不是3人，请核对合约管理员配置');const confirmations=request?await Promise.all(admins.map(a=>call(S.confirmed+pad(request.id)+addressWord(a),block).then(v=>BigInt(v)!==0n))):admins.map(()=>false);return {block,owner,admins,request,duplicate:matching.length>1,confirmations,available:BigInt(availableRaw)};}
-function render() {
-  const s = snapshot;
-  const walletLabel = $('wallet');
-  walletLabel.hidden = !account;
-  walletLabel.textContent = account ? '当前钱包 ' + account : '';
-  renderFeedback();
-  if (!s) return;
-
-  const allowed = actions({...s, account, busy, confirmed: s.confirmations[s.admins.indexOf(account)] || false});
-  for (const kind of ['create', 'confirm', 'execute']) $(kind).disabled = !allowed[kind];
-
-  const signers = s.admins.map((address, index) => {
-    const row = document.createElement('div');
-    row.className = 'signer';
-    const identity = document.createElement('div');
-    identity.textContent = index === 0 ? '合约所有者' : '签名管理员 ' + index;
-    if (address === account) identity.append(' · 当前钱包');
-    const code = document.createElement('code');
-    code.textContent = address;
-    identity.append(code);
-    row.append(identity);
-    if (s.request) {
-      const badge = document.createElement('span');
-      badge.className = s.confirmations[index] ? 'signed' : 'pending';
-      badge.textContent = s.confirmations[index] ? '已确认' : '待确认';
-      row.append(badge);
-    }
-    return row;
-  });
-  $('signers').replaceChildren(...signers);
-}
-async function refresh() {
-  if (loading || busy) return;
-  loading = true;
-  try {
-    snapshot = await readState();
-    readFailed = false;
-  } catch {
-    snapshot = null;
-    readFailed = true;
-    for (const kind of ['create', 'confirm', 'execute']) $(kind).disabled = true;
-  } finally {
-    loading = false;
-  }
-  render();
-}
-async function connect(){try{wallet=window.ethereum?.providers?.find(p=>p.isMetaMask)||window.ethereum;if(!wallet)throw Error('请在安装了钱包扩展的浏览器，或钱包内置浏览器中打开本页。');const accounts=await wallet.request({method:'eth_requestAccounts'});account=(accounts[0]||'').toLowerCase();wallet.on?.('accountsChanged',a=>{account=(a[0]||'').toLowerCase();refresh();});wallet.on?.('chainChanged',()=>refresh());await refresh();}catch(e){showError(e);}}
-async function correctNetwork(){const chain=await wallet.request({method:'eth_chainId'});if(BigInt(chain)!==56n){try{await wallet.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]});}catch(e){if(e.code!==4902)throw e;await wallet.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:[RPCS[0]],blockExplorerUrls:[explorer]}]});}if(BigInt(await wallet.request({method:'eth_chainId'}))!==56n)throw Error('请切换至 BSC 主网后操作');}}
-function review(kind,r){$('review').returnValue='cancel';$('reviewTitle').textContent={create:'创建退款申请',confirm:'确认退款申请',execute:'执行退款'}[kind];$('reviewBody').textContent=`BSC 主网（56）\n合约：${CONTRACT}\n收款地址：${RECIPIENT}\n金额：0.4 BNB\n${r?'申请编号：#'+r.id:'创建后请等待链上返回申请编号'}\n本次操作钱包：${account}`;return new Promise(resolve=>{$('review').addEventListener('close',()=>resolve($('review').returnValue==='send'),{once:true});$('review').showModal();});}
-async function transact(kind){if(busy||!wallet)return;busy=true;operationFeedback='';render();try{await correctNetwork();account=((await wallet.request({method:'eth_accounts'}))[0]||'').toLowerCase();snapshot=await readState();let r=snapshot.request;const allowed=actions({...snapshot,account,busy:false,confirmed:snapshot.confirmations[snapshot.admins.indexOf(account)]||false});if(!allowed[kind])throw Error('当前链上状态或钱包身份不允许这项操作，请刷新查看。');if(!await review(kind,r))return;const fresh=await readState();if((fresh.request?.id||0)!==(r?.id||0))throw Error('申请状态发生变化，请刷新后重新核对。');snapshot=fresh;r=fresh.request;const check=actions({...fresh,account,busy:false,confirmed:fresh.confirmations[fresh.admins.indexOf(account)]||false});if(!check[kind])throw Error('状态已经改变，请刷新后操作。');await correctNetwork();const accounts=await wallet.request({method:'eth_accounts'});if(accounts[0]?.toLowerCase()!==account)throw Error('钱包地址已改变，请重新连接。');const data=kind==='create'?S.create+addressWord(RECIPIENT)+pad(AMOUNT):S[kind]+pad(r.id);const tx={from:account,to:CONTRACT,data,value:'0x0'};await wallet.request({method:'eth_call',params:[tx,'latest']});const gas=await wallet.request({method:'eth_estimateGas',params:[tx]});tx.gas='0x'+(BigInt(gas)*120n/100n).toString(16);const hash=await wallet.request({method:'eth_sendTransaction',params:[tx]});operationFeedback='交易已提交，等待链上确认…';renderFeedback();let receipt=null;for(let i=0;i<180;i++){receipt=await rpc('eth_getTransactionReceipt',[hash]);if(receipt)break;await new Promise(resolve=>setTimeout(resolve,2000));}if(!receipt)throw Error('交易仍在确认中，请在钱包查看，刷新后再操作。');if(BigInt(receipt.status)!==1n)throw Error('交易执行失败，请在钱包查看。');operationFeedback={create:'申请已创建。',confirm:'签名已确认。',execute:''}[kind];}catch(e){showError(e);}finally{busy=false;await refresh();}}
-$('connect').onclick=()=>{operationFeedback='';renderFeedback();connect();};$('refresh').onclick=()=>{if(busy)return;operationFeedback='';refresh();};for(const kind of ['create','confirm','execute'])$(kind).onclick=()=>transact(kind);
-refresh();setInterval(refresh,20000);
+import {CONTRACT,bnb,loadBatch,assertCanConfirm,transactionData,rpc,validateManifest} from './batch-core.js';
+const $=id=>document.getElementById(id);let manifest,snapshot,account='',wallet,busy=false,loading=false;
+function message(text,hash){$('activity').replaceChildren(document.createTextNode(text));if(hash){const a=document.createElement('a');a.href='https://bscscan.com/tx/'+hash;a.textContent=' 查看交易';a.target='_blank';a.rel='noopener';$('activity').append(a);}}
+function render(){if(!snapshot)return;const i=snapshot.admins.indexOf(account);$('wallet').textContent=account?`${account} · ${i>0?'合伙人':i===0?'管理员：请使用本机程序':'查看者，无确认权限'}`:'未连接钱包 · 可以查看进度';$('stage').textContent=`已执行 ${snapshot.rows.filter(r=>r.status==='done').length}/32 笔 · 待创建 ${snapshot.rows.filter(r=>!r.request).length} 笔`;$('updated').textContent='区块 '+Number(BigInt(snapshot.block))+' · '+new Date().toLocaleTimeString('zh-CN');$('rows').replaceChildren();for(const r of snapshot.rows){const tr=document.createElement('tr');[r.index,r.address,r.shares,bnb(r.refundWei),r.request?'#'+r.request.id:'待创建',r.status==='blocked'?'需核对':r.status==='done'?'已执行':r.request?`${r.request.confirmed}/3`:'—'].forEach((v,j)=>{const td=document.createElement('td');td.textContent=v;if(j===1){td.className='address';const a=document.createElement('a');a.href='https://bscscan.com/address/'+r.address;a.textContent=v;a.target='_blank';a.rel='noopener';td.replaceChildren(a);}tr.append(td);});const td=document.createElement('td'),button=document.createElement('button');button.textContent=r.status==='done'?'已退款':i>0&&r.signatures[i]?'你已确认':'核对并确认';let allowed=false;try{assertCanConfirm(snapshot,r,account);allowed=true;}catch{}button.disabled=busy||!allowed;button.onclick=()=>confirm(r.address);td.append(button);tr.append(td);if(r.status==='blocked'){tr.title=r.reason;tr.className='blocked';}if(r.status==='done')tr.className='done';$('rows').append(tr);}}
+async function refresh(){if(busy||loading||!manifest)return;loading=true;try{snapshot=await loadBatch(manifest);render();}catch(e){snapshot=null;$('rows').replaceChildren();$('stage').textContent='读取失败，操作已暂停';message(e.message);}finally{loading=false;}}
+async function connect(){try{wallet=window.ethereum?.providers?.find(p=>p.isMetaMask)||window.ethereum;if(!wallet)throw Error('请使用安装钱包插件的浏览器，或钱包内置浏览器。');account=((await wallet.request({method:'eth_requestAccounts'}))[0]||'').toLowerCase();wallet.on?.('accountsChanged',a=>{account=(a[0]||'').toLowerCase();refresh();});wallet.on?.('chainChanged',refresh);await refresh();}catch(e){message(e.code===4001?'已取消连接':e.message);}}
+async function network(){if(BigInt(await wallet.request({method:'eth_chainId'}))!==56n)await wallet.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]});if(BigInt(await wallet.request({method:'eth_chainId'}))!==56n)throw Error('请切换BSC主网');}
+async function confirm(address){if(busy||!wallet)return;busy=true;render();let hash='';try{await network();account=((await wallet.request({method:'eth_accounts'}))[0]||'').toLowerCase();let s=await loadBatch(manifest),r=s.rows.find(x=>x.address===address);const id=assertCanConfirm(s,r,account);$('reviewBody').textContent=`BSC主网 · 申请 #${id}\n原地址／收款地址：\n${r.address}\n\n份数：${r.shares}\n退款：${bnb(r.refundWei)} BNB\n合约：${CONTRACT}\n钱包：${account}`;const yes=await new Promise(resolve=>{$('review').addEventListener('close',()=>resolve($('review').returnValue==='send'),{once:true});$('review').showModal();});if(!yes)return;s=await loadBatch(manifest);r=s.rows.find(x=>x.address===address);if(assertCanConfirm(s,r,account)!==id)throw Error('申请已改变，请重新核对');await network();if(((await wallet.request({method:'eth_accounts'}))[0]||'').toLowerCase()!==account)throw Error('钱包已改变');const tx={from:account,to:CONTRACT,value:'0x0',data:transactionData('confirm',r)};await wallet.request({method:'eth_call',params:[tx,'latest']});const gas=await wallet.request({method:'eth_estimateGas',params:[tx]});tx.gas='0x'+(BigInt(gas)*120n/100n).toString(16);hash=await wallet.request({method:'eth_sendTransaction',params:[tx]});message('确认交易已提交，等待回执。',hash);let receipt;for(let n=0;n<120;n++){receipt=await rpc('eth_getTransactionReceipt',[hash]);if(receipt)break;await new Promise(r=>setTimeout(r,2000));}if(!receipt)throw Error('交易仍在处理中，请查看凭证后刷新');if(BigInt(receipt.status)!==1n)throw Error('确认交易失败');message(`申请 #${id} 确认成功。`,hash);}catch(e){message(e.code===4001?'已取消钱包操作':e.message,hash);}finally{busy=false;await refresh();}}
+$('connect').onclick=connect;$('refresh').onclick=refresh;try{const res=await fetch('./batch.json',{cache:'no-store'});if(!res.ok)throw Error('清单加载失败');manifest=validateManifest(await res.json());await refresh();}catch(e){message(e.message);$('stage').textContent='清单无法读取，操作停用';}setInterval(refresh,30000);

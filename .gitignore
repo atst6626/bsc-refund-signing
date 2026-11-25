@@ -1,0 +1,4 @@
+admin-local/
+node_modules/
+*.log
+.env*
